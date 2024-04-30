@@ -70,19 +70,10 @@ public class DiscordBot extends ListenerAdapter {
       fullMessage = fullMessage.replace("%author%",author)
               .replace("%message%",message);
 
-      ConfigurationSection section = DiscordFile.getFileConfig().getConfigurationSection("worldGroups");
-      if (section == null) return;
-      Set<String> groupNames = section.getKeys(false);
-      for (String groupName : groupNames) {
-         String channelId = DiscordFile.getFileConfig().getString("worldGroups." + groupName + ".channelId");
-
-         if (!channel.equals(channelId)) continue;
-         List<String> worldNames = section.getStringList(groupName + ".worlds");
-
-         for (Player player : Bukkit.getOnlinePlayers()) {
-            if (!worldNames.contains(player.getWorld().getName())) continue;
-            player.sendMessage(Configuration.text(fullMessage));
-         }
+      List<String> worldGroups = DiscordFile.worldGroups(channel);
+      for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+         if (!worldGroups.contains(onlinePlayer.getWorld().getName())) continue;
+         onlinePlayer.sendMessage(Configuration.text(fullMessage));
       }
 
    }
