@@ -5,10 +5,18 @@ import dev.jairusu.panaderoplugin.CustomFiles.DiscordFile;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
-public class DiscordBot {
+import java.util.List;
+import java.util.Set;
+
+public class DiscordBot extends ListenerAdapter {
 
    public static JDA JAVADISCORD;
 
@@ -26,7 +34,7 @@ public class DiscordBot {
       try {
          JDA jda = JDABuilder.createDefault(botToken, GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MEMBERS, GatewayIntent.MESSAGE_CONTENT)
                  .setActivity(activity)
-                 .addEventListeners(new DiscordChat(Configuration.getPlugin))
+                 .addEventListeners(this)
                  .build();
          jda.awaitReady();
          JAVADISCORD = jda;
@@ -46,6 +54,37 @@ public class DiscordBot {
       } catch (Exception error) {
          Configuration.getPlugin.getLogger().info(error.toString());
       }
+   }
+
+   @Override
+   public void onMessageReceived(@NotNull MessageReceivedEvent event) {
+      String message = event.getMessage().getContentDisplay();
+      if (message.isEmpty() || message.isBlank()) return;
+
+      if (event.getAuthor().isBot() || event.getAuthor().isSystem()) return;
+      String author = event.getAuthor().getName();
+
+      String channel = event.getChannel().getId();
+      String fullMessage = DiscordFile.getFileConfig().getString("message.messageFormat");
+      if (fullMessage == null) return;
+      fullMessage = fullMessage.replace("%author%",author)
+              .replace("%message%",message);
+
+      ConfigurationSection section = DiscordFile.getFileConfig().getConfigurationSection("worldGroups");
+      if (section == null) return;
+      Set<String> groupNames = section.getKeys(false);
+      for (String groupName : groupNames) {
+         String channelId = DiscordFile.getFileConfig().getString("worldGroups." + groupName + ".channelId");
+
+         if (!channel.equals(channelId)) continue;
+         List<String> worldNames = section.getStringList(groupName + ".worlds");
+
+         for (Player player : Bukkit.getOnlinePlayers()) {
+            if (!worldNames.contains(player.getWorld().getName())) continue;
+            player.sendMessage(Configuration.text(fullMessage));
+         }
+      }
+
    }
 
 }
