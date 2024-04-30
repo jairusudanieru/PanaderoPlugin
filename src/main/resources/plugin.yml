@@ -1,0 +1,4 @@
+name: PanaderoPlugin
+version: '${project.version}'
+main: dev.jairusu.panaderoplugin.PanaderoPlugin
+api-version: '1.20'
