@@ -2,7 +2,6 @@ package dev.jairusu.panaderoplugin.Methods;
 
 import com.github.games647.fastlogin.bukkit.FastLoginBukkit;
 import com.github.games647.fastlogin.core.PremiumStatus;
-import com.github.games647.fastlogin.core.hooks.AuthPlugin;
 import dev.jairusu.panaderoplugin.Configuration;
 import dev.jairusu.panaderoplugin.CustomFiles.PasswordFile;
 import org.bukkit.GameMode;
@@ -13,7 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class Authentication implements AuthPlugin<Player> {
+public class Authentication {
 
    public static FastLoginBukkit getFastLoginBukkit = JavaPlugin.getPlugin(FastLoginBukkit.class);
 
@@ -31,7 +30,7 @@ public class Authentication implements AuthPlugin<Player> {
          player.setMetadata("unlogged", new FixedMetadataValue(Configuration.getPlugin, "unlogged"));
          player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, PotionEffect.INFINITE_DURATION, 1, true, true));
          player.setGameMode(GameMode.SPECTATOR);
-//         player.sendMessage(MessageClass.miniMessage("<gray>/login (password)"));
+         player.sendMessage(Configuration.text("<gray>/login (password)"));
       } else {
          if (!PasswordFile.getPlayerFile(player).exists() || PasswordFile.getPlayerFileConfig(player).get("data.username") == null) {
             autoRegisterPlayer(player);
@@ -43,7 +42,7 @@ public class Authentication implements AuthPlugin<Player> {
       player.setMetadata("unlogged", new FixedMetadataValue(Configuration.getPlugin, "unlogged"));
       player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, PotionEffect.INFINITE_DURATION, 1, true, true));
       player.setGameMode(GameMode.SPECTATOR);
-//      player.sendMessage(MessageClass.miniMessage("<gray>/register (password) (confirmPassword)"));
+      player.sendMessage(Configuration.text("<gray>/register (password) (confirmPassword)"));
    }
 
    private static void autoRegisterPlayer(Player player) {
@@ -53,18 +52,4 @@ public class Authentication implements AuthPlugin<Player> {
       PasswordFile.savePasswordFile(player, "data.status", "premium");
    }
 
-   @Override
-   public boolean forceLogin(Player player) {
-      return false;
-   }
-
-   @Override
-   public boolean forceRegister(Player player, String s) {
-      return false;
-   }
-
-   @Override
-   public boolean isRegistered(String s) throws Exception {
-      return false;
-   }
 }

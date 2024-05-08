@@ -15,7 +15,7 @@ public class MessageFile {
       file = new File(Configuration.getPlugin.getDataFolder(), "message.yml");
       if (!file.exists()) {
          boolean getParentFile = file.getParentFile().mkdirs();
-         if (!getParentFile) return;
+         if (!getParentFile) Configuration.getPlugin.getLogger().info("Error in getting message.yml parent file!");
          Configuration.getPlugin.saveResource("message.yml", false);
       }
       fileConfiguration = YamlConfiguration.loadConfiguration(file);

@@ -1,0 +1,64 @@
+package dev.jairusu.panaderoplugin.Events;
+
+import dev.jairusu.panaderoplugin.Configuration;
+import dev.jairusu.panaderoplugin.Methods.WorldGroups;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerRespawnEvent;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+
+public class PlayerRespawn implements Listener {
+
+   @EventHandler
+   public void onPlayerRespawn(PlayerRespawnEvent event) {
+      Player player = event.getPlayer();
+      World playerWorld = player.getWorld();
+
+      if (!Configuration.isAuthenticated(player)) return;
+      if (playerWorld.equals(WorldGroups.arenaWorld())) return;
+      List<String> worlds = Arrays.asList("world","world_nether","world_the_end");
+      if (!worlds.contains(playerWorld.getName())) return;
+      Location spawnLocation = player.getRespawnLocation();
+
+      if (spawnLocation == null) {
+         spawnLocation = Objects.requireNonNull(Bukkit.getWorld("world")).getSpawnLocation();
+         event.setRespawnLocation(spawnLocation);
+         return;
+      }
+
+      int radius = Configuration.getInteger("config.bedRadius");
+      Location loc = spawnLocation;
+      World world = loc.getWorld();
+      for (int x = -radius; x < radius; x++) {
+         for (int y = -radius; y < radius; y++) {
+            for (int z = -radius; z < radius; z++) {
+               Block block = world.getBlockAt(loc.getBlockX()+x, loc.getBlockY()+y, loc.getBlockZ()+z);
+               if (block.getType().name().contains("_BED")) return;
+               if (block.getType().equals(Material.RESPAWN_ANCHOR)) return;
+            }
+         }
+      }
+
+      spawnLocation = Objects.requireNonNull(Bukkit.getWorld("world")).getSpawnLocation();
+      event.setRespawnLocation(spawnLocation);
+   }
+
+   @EventHandler
+   public void onPlayerRespawn1(PlayerRespawnEvent event) {
+      Player player = event.getPlayer();
+      World playerWorld = player.getWorld();
+
+      if (!playerWorld.equals(WorldGroups.arenaWorld())) return;
+      Bukkit.getScheduler().runTaskLater(Configuration.getPlugin, () -> player.getInventory().clear(), 1L);
+   }
+
+}

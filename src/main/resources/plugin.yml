@@ -2,3 +2,45 @@ name: PanaderoPlugin
 version: '${project.version}'
 main: dev.jairusu.panaderoplugin.PanaderoPlugin
 api-version: '1.20'
+depend: [FastLogin]
+
+commands:
+  afk:
+    description: afk
+  arenastart:
+    description: arenastart
+  panadero:
+    description: panadero
+  setarena:
+    description: setarena
+    permission: op
+  setlocation:
+    description: setlocation
+    permission: op
+  reply:
+    description: reply
+    aliases:
+      - rep
+      - r
+  spawn:
+    description: spawn
+    aliases:
+      - hub
+      - lobby
+  suicide:
+    description: suicide
+  whisper:
+    description: whisper
+    aliases:
+      - tell
+      - msg
+      - w
+  login:
+    aliases:
+      - log
+  register:
+    aliases:
+      - reg
+  changepassword:
+    aliases:
+      - changepass

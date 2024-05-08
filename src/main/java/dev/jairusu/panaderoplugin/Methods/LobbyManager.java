@@ -107,7 +107,7 @@ public class LobbyManager {
       SkullMeta headMeta = (SkullMeta) itemStack.getItemMeta();
       headMeta.displayName(Configuration.text(itemName));
       headMeta.lore(itemLore);
-      GameProfile profile = new GameProfile(UUID.randomUUID(), null);
+      GameProfile profile = new GameProfile(UUID.randomUUID(), "example");
       byte[] encodedData = Base64.getEncoder().encode(String.format("{textures:{SKIN:{url:\"%s\"}}}", url).getBytes());
       profile.getProperties().put("textures", new Property("textures", new String(encodedData)));
 
@@ -116,7 +116,7 @@ public class LobbyManager {
          profileField.setAccessible(true);
          profileField.set(headMeta, profile);
       } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException exception) {
-         Bukkit.getLogger().warning(exception.getMessage());
+         Configuration.getPlugin.getLogger().warning(exception.getMessage());
       }
 
       itemStack.setItemMeta(headMeta);

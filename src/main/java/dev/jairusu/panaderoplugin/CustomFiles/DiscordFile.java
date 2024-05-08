@@ -1,7 +1,6 @@
 package dev.jairusu.panaderoplugin.CustomFiles;
 
 import dev.jairusu.panaderoplugin.Configuration;
-import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -19,7 +18,7 @@ public class DiscordFile {
       file = new File(Configuration.getPlugin.getDataFolder(), "discord.yml");
       if (!file.exists()) {
          boolean getParentFile = file.getParentFile().mkdirs();
-         if (!getParentFile) return;
+         if (!getParentFile) Configuration.getPlugin.getLogger().info("Error in getting discord.yml parent file!");
          Configuration.getPlugin.saveResource("discord.yml", false);
       }
       fileConfiguration = YamlConfiguration.loadConfiguration(file);

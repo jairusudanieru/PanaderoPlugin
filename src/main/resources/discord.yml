@@ -1,0 +1,9 @@
+discord:
+  botToken: "botToken"
+  messageFormat: "<reset>[<aqua>Discord <reset>| <#f2cd74>@%author%<reset>]: %message%"
+
+worldGroups:
+  channel:
+    - world
+    - world_nether
+    - world_the_end

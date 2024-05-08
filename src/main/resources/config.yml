@@ -1,0 +1,45 @@
+config:
+  afkTimeout: 300
+  bedRadius: 2
+  lobbyWorld: lobby
+  voidYLevel: -64
+  launchpadPower: 2.0
+  launchpadHeight: 0.5
+  teleportOnSpawn: false
+
+message:
+  sleepMessage: '<yellow>%player% <gold>went to sleep. Sweet Dreams!'
+  senderMessage: '<gray>You whisper to %target%: %message%'
+  targetMessage: '<gray>%sender% whispers to you: %message%'
+  joinMessage: '<yellow>%player% joined the game'
+  quitMessage: '<yellow>%player% left the game'
+
+location:
+  arenaLocation: location
+  authLocation: location
+  spawnLocation: location
+  survivalLocation: location
+  creativeLocation: location
+  pvpArenaLocation: location
+
+arenaHub:
+  pos1: location
+  pos2: location
+
+advancements:
+  allowed:
+    - world
+    - world_nether
+    - world_the_end
+
+worldGroups:
+  group1:
+    - world
+    - world_nether
+    - world_the_end
+  group2:
+    - spawn
+  group3:
+    - creative
+  group4:
+    - pvp_arena

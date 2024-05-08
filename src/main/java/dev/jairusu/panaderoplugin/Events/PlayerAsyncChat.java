@@ -1,5 +1,6 @@
 package dev.jairusu.panaderoplugin.Events;
 
+import dev.jairusu.panaderoplugin.Configuration;
 import dev.jairusu.panaderoplugin.Methods.WorldGroups;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
@@ -30,7 +31,7 @@ public class PlayerAsyncChat implements Listener {
       }
 
       String consoleMessage = "[" + player.getName() + "]: " + message;
-      Bukkit.getLogger().info(consoleMessage);
+      Configuration.getPlugin.getLogger().info(consoleMessage);
    }
 
 }

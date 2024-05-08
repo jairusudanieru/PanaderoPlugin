@@ -60,9 +60,6 @@ public class InventoryMove implements Listener {
 
       Inventory clickedInventory = event.getClickedInventory();
       if (clickedInventory == null) return;
-
-      ItemStack cursorItem = event.getCursor();
-      if (cursorItem == null) return;
       if (clickedInventory.equals(customInventory)) event.setCancelled(true);
 
       List<ItemStack> selectorItems = Arrays.asList(

@@ -18,7 +18,7 @@ public class PasswordFile {
       File file = getPlayerFile(player);
       if (!file.exists()) {
          boolean getParentFile = file.getParentFile().mkdirs();
-         if (!getParentFile) return null;
+         if (!getParentFile) Configuration.getPlugin.getLogger().info("Error in getting password.yml parent file!");
          try {
             boolean fileCreated = file.createNewFile();
             if (!fileCreated) throw new IOException("Unable to create file!");
@@ -40,6 +40,5 @@ public class PasswordFile {
          Configuration.getPlugin.getLogger().info("Unable to save file!");
       }
    }
-
 
 }

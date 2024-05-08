@@ -9,19 +9,17 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.Set;
 
 public class DiscordBot extends ListenerAdapter {
 
    public static JDA JAVADISCORD;
 
-   public void enableBot() {
-      String botToken = DiscordFile.getFileConfig().getString("botToken");
+   public static void enableBot() {
+      String botToken = DiscordFile.getFileConfig().getString("discord.botToken");
       if (botToken == null || botToken.equals("botToken") || botToken.isEmpty()) return;
       String activityName = DiscordFile.getFileConfig().getString("activityName");
       if (activityName == null || activityName.isEmpty()) activityName = "Minecraft";
@@ -34,23 +32,23 @@ public class DiscordBot extends ListenerAdapter {
       try {
          JDA jda = JDABuilder.createDefault(botToken, GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MEMBERS, GatewayIntent.MESSAGE_CONTENT)
                  .setActivity(activity)
-                 .addEventListeners(this)
+                 .addEventListeners(new DiscordBot())
                  .build();
          jda.awaitReady();
          JAVADISCORD = jda;
-         Configuration.getPlugin.getLogger().info("[PandeDiscord] Discord bot successfully enabled!");
+         Configuration.getPlugin.getLogger().info("[" + Configuration.getPlugin.getName() + "] Discord bot successfully enabled!");
       } catch (Exception error) {
          Configuration.getPlugin.getLogger().info(error.toString());
       }
    }
 
-   public void disableBot() {
-      String botToken = DiscordFile.getFileConfig().getString("botToken");
+   public static void disableBot() {
+      String botToken = DiscordFile.getFileConfig().getString("discord.botToken");
       if (botToken == null || botToken.equals("botToken") || botToken.isEmpty()) return;
 
       try {
          JAVADISCORD.shutdown();
-         Bukkit.getLogger().info("[PandeDiscord] Discord bot successfully disabled!");
+         Configuration.getPlugin.getLogger().info("[" + Configuration.getPlugin.getName() + "] Discord bot successfully disabled!");
       } catch (Exception error) {
          Configuration.getPlugin.getLogger().info(error.toString());
       }
@@ -65,7 +63,7 @@ public class DiscordBot extends ListenerAdapter {
       String author = event.getAuthor().getName();
 
       String channel = event.getChannel().getId();
-      String fullMessage = DiscordFile.getFileConfig().getString("message.messageFormat");
+      String fullMessage = DiscordFile.getFileConfig().getString("discord.messageFormat");
       if (fullMessage == null) return;
       fullMessage = fullMessage.replace("%author%",author)
               .replace("%message%",message);
@@ -76,6 +74,8 @@ public class DiscordBot extends ListenerAdapter {
          onlinePlayer.sendMessage(Configuration.text(fullMessage));
       }
 
+      String rawMessage = "[Discord | @" + author + "]: " + message;
+      Configuration.getPlugin.getLogger().info(rawMessage);
    }
 
 }

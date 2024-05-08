@@ -1,0 +1,6 @@
+message:
+  loggedInMessage: "<yellow>Logged in"
+  loggedOutMessage: "<yellow>Logged out"
+  registeredMessage: "<reset>You are now registered, please rejoin the game!"
+  loginMessage: "<gray>/login (password)"
+  registerMessage: "<gray>/register (password) (confirmPassword)"
